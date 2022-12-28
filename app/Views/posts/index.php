@@ -1,0 +1,1 @@
+<div class="alert alert-success">Connexion réussie</div>
