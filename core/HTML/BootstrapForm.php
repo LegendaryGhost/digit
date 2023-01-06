@@ -31,8 +31,8 @@ class BootstrapForm extends Form {
         return $this->surround($label . $input);
     }
 
-    public function  submit($message = 'Envoyer') {
-        return $this->surround('<button type="submit" class="btn btn-primary">' . $message . '</button>');
+    public function  submit($message = 'Envoyer', $name = '') {
+        return $this->surround('<input class="btn btn-primary" type="submit" value="' . $message . '" ' . (($name == '') ? '' : 'name="' . $name . '" ') . '>');
     }
 
 }

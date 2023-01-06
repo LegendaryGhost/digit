@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use \App;
+use App\Auth\AppDBAuth;
+use Core\HTML\BootstrapForm;
 use App\Controller\AppController;
 
 class PostsController extends AppController {
@@ -12,24 +15,51 @@ class PostsController extends AppController {
     }
 
     public function index() {
-        // $posts = $this->Post->last();
-        // $categories = $this->Category->all();
-        $this->render('posts.index');
+        if(!AppDBAuth::getInstance(App::getInstance()->getDb())->logged())
+            $this->forbidden();
+
+        $posts = $this->Post->last();
+        
+        $this->render('posts.index', compact('posts'));
     }
 
-    public function category() {
-        $categorie = $this->Category->find($_GET['id']);
-        if($categorie === false){
-            $this->notFound();
+    public function add() {
+        if(!AppDBAuth::getInstance(App::getInstance()->getDb())->logged())
+            $this->forbidden();
+
+        if(!empty($_POST)) {
+            $image = $_FILES['image']['name'];
+            
+            if($image != '') {
+                $new_image_name = $this->gen_file_name($image);
+                $destination = ROOT . '/pictures/' . $new_image_name;
+                move_uploaded_file($_FILES['image']['tmp_name'], $destination);
+                $this->Post->create([
+                    'id_publish' => $_SESSION['auth'],
+                    'content' => $_POST['content'],
+                    'image' => $new_image_name
+                ]);
+            } else {
+                $this->Post->create([    
+                    'id_publish' => $_SESSION['auth'],
+                    'content' => $_POST['content']
+                ]);
+            }
+            return $this->index();
         }
-        $articles = $this->Post->lastByCategory($_GET['id']);
-        $categories = $this->Category->all();
-        $this->render('posts.category', compact('articles', 'categories', 'categorie'));
+
+        $form = new BootstrapForm($_POST);
+
+        $this->render('posts.add', compact('form'));
     }
 
-    public function show() {
-        $post = $this->Post->findWithCategory($_GET['id']);
-        $this->render('posts.show', compact('post'));
+    private function gen_file_name($name) {
+        $gen_name = md5(microtime()) . $name;
+        
+        while(file_exists(ROOT . '/' . $gen_name))
+            $gen_name = md5(microtime()) . $name;
+
+        return $gen_name;
     }
 
 }

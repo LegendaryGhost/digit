@@ -16,7 +16,7 @@ class UsersController extends AppController {
     public function login() {    
         $errors = false;
         if(!empty($_POST)) {
-            $auth = new AppDBAuth(App::getInstance()->getDb());
+            $auth = AppDBAuth::getInstance(App::getInstance()->getDb());
             if($auth->login($_POST['email'], $_POST['password']))
                 header('Location: index.php?page=posts.index');
             else
@@ -61,7 +61,7 @@ class UsersController extends AppController {
                 );
 
                 if($result) {
-                    $auth = new AppDBAuth(App::getInstance()->getDb());
+                    $auth =AppDBAuth::getInstance(App::getInstance()->getDb());
                     $auth->login($_POST['email'], $_POST['password']);
                     header('Location: index.php?page=posts.index');
                 } else {

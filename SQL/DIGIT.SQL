@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS messages
    id_send INTEGER NOT NULL  ,
    id_receive INTEGER NOT NULL  ,
    content TEXT NOT NULL  ,
-   message_date DATE NOT NULL  ,
-   message_hour TIME NOT NULL
+   message_date DATE NOT NULL DEFAULT CURDATE()  ,
+   message_hour TIME NOT NULL DEFAULT CURTIME()
  ) 
  comment = "";
 

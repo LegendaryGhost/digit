@@ -34,8 +34,8 @@ class Form {
         return $this->surround($label . $input);
     }
 
-    public function  submit($message = 'Envoyer') {
-        return $this->surround('<button type="submit">' . $message . '</button>');
+    public function  submit($message = 'Envoyer', $name = '') {
+        return $this->surround('<input type="submit" value="' . $message . '" ' . (($name == '') ? '' : 'name="' . $name . '" ') . '>');
     }
 
 }

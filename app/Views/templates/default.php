@@ -1,3 +1,4 @@
+<?php use App\Auth\AppDBAuth; ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,7 +20,7 @@
     <nav class="navbar bg-primary navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand text-white" href="index.php?page=users.login">Digit</a>
+          <a class="navbar-brand text-white" href="<?= (AppDBAuth::getInstance(App::getInstance()->getDb())->logged()) ? 'index.php?page=posts.index' : 'index.php?page=users.login' ?>">Digit</a>
         </div>
       </div>
     </nav>

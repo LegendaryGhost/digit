@@ -3,8 +3,18 @@
 namespace App\Auth;
 
 use Core\Auth\DBAuth;
+use Core\Database\Database;
 
 class AppDBAuth extends DBAuth {
+
+    private static $_instance;
+
+    public static function getInstance(Database $db){
+        if(is_null(self::$_instance)){
+            self::$_instance = new AppDBAuth($db);
+        }
+        return self::$_instance;
+    }
 
     /**
      * Allows the user to login
@@ -22,6 +32,10 @@ class AppDBAuth extends DBAuth {
             }
         }
         return false;
+    }
+
+    public function logged() {
+        return isset($_SESSION['auth']);
     }
 
 }
